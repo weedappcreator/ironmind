@@ -1,0 +1,313 @@
+/* IronMind Premium Design Tokens & Animations */
+
+:root {
+  --fitness-emerald: oklch(72% 0.18 155);
+  --fitness-emerald-subtle: oklch(72% 0.18 155 / 0.12);
+  --fitness-emerald-glow: oklch(72% 0.18 155 / 0.25);
+  --fitness-surface: oklch(7% 0.003 155);
+  --fitness-surface-raised: oklch(11% 0.004 155);
+  --fitness-card: oklch(13% 0.005 155);
+  --fitness-card-hover: oklch(16% 0.006 155);
+  --fitness-border: oklch(100% 0 0 / 0.06);
+  --fitness-border-hover: oklch(100% 0 0 / 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ───── Entrance Keyframes ───── */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-right {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-left {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(0.85) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ───── Continuous Keyframes ───── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-8px) rotate(1deg); }
+  66% { transform: translateY(4px) rotate(-0.5deg); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px var(--fitness-emerald-glow); }
+  50% { box-shadow: 0 0 28px var(--fitness-emerald-glow), 0 0 60px oklch(72% 0.18 155 / 0.08); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-3%, -5%); }
+  20% { transform: translate(-8%, 3%); }
+  30% { transform: translate(4%, -12%); }
+  40% { transform: translate(-2%, 12%); }
+  50% { transform: translate(-8%, 5%); }
+  60% { transform: translate(8%, 0%); }
+  70% { transform: translate(0%, 8%); }
+  80% { transform: translate(2%, 18%); }
+  90% { transform: translate(-5%, 5%); }
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.07; }
+}
+
+/* ───── Entrance Classes ───── */
+
+.animate-fade-up { animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in { animation: fade-in 0.5s ease-out both; }
+.animate-scale-in { animation: scale-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-slide-right { animation: slide-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-slide-left { animation: slide-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-zoom-in { animation: zoom-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ───── Continuous Classes ───── */
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-grain { animation: grain 8s steps(10) infinite; }
+.animate-breathe { animation: breathe 4s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+/* ───── Stagger Delays ───── */
+
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.1s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.2s; }
+.delay-5 { animation-delay: 0.25s; }
+.delay-6 { animation-delay: 0.3s; }
+.delay-7 { animation-delay: 0.35s; }
+.delay-8 { animation-delay: 0.4s; }
+
+/* ───── Background Elements ───── */
+
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  will-change: transform;
+}
+
+/* ───── Glass Components ───── */
+
+.glass-card {
+  background: var(--fitness-card);
+  border: 1px solid var(--fitness-border);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card:hover {
+  background: var(--fitness-card-hover);
+  border-color: var(--fitness-border-hover);
+  transform: translateY(-2px);
+}
+
+.glass-panel {
+  background: var(--fitness-surface-raised);
+  border: 1px solid var(--fitness-border);
+  backdrop-filter: blur(20px);
+}
+
+.emerald-glow {
+  box-shadow: 0 0 20px var(--fitness-emerald-glow);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--fitness-emerald) 0%, oklch(72% 0.18 155 / 0.5) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ───── Nav Effects ───── */
+
+.nav-link {
+  position: relative;
+  overflow: hidden;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--fitness-emerald);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ───── Parallax Layers ───── */
+
+.parallax-slow {
+  will-change: transform;
+}
+
+.parallax-medium {
+  will-change: transform;
+}
+
+/* ───── Hover Lift ───── */
+
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ───── Image Zoom ───── */
+
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.img-zoom:hover img {
+  transform: scale(1.08);
+}
+
+/* ───── Button Press ───── */
+
+.btn-press {
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-press:active {
+  transform: scale(0.96);
+}
+
+/* ───── Page Transition ───── */
+
+.page-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ───── Progressive Blur ───── */
+
+.progressive-blur {
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+
+/* ───── Shimmer Card ───── */
+
+.card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.card-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.02) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+/* ───── Border Glow ───── */
+
+.border-glow {
+  position: relative;
+}
+.border-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--fitness-emerald) 0%, transparent 50%, transparent 100%);
+  z-index: -1;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+.border-glow:hover::before {
+  opacity: 0.6;
+}
+
+/* ───── Floating Particles ───── */
+
+.particle-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--fitness-emerald);
+  opacity: 0.15;
+  animation: float-particle linear infinite;
+}
+
+@keyframes float-particle {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: var(--p-o, 0.15); }
+  90% { opacity: var(--p-o, 0.15); }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
