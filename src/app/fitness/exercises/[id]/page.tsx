@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import FitnessShell from "../../_shell";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import "../../fitness.css";
 
 export default async function ExerciseDetailPage({
   params,
@@ -27,7 +28,7 @@ export default async function ExerciseDetailPage({
 
         <div className="grid lg:grid-cols-2 gap-8">
           <div>
-            <div className="aspect-square bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden flex items-center justify-center mb-4">
+            <div className="aspect-square bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden flex items-center justify-center mb-4 shadow-lg shadow-black/20">
               {exercise.gifUrl ? (
                 <img
                   src={`https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/${exercise.gifUrl}`}
@@ -35,7 +36,7 @@ export default async function ExerciseDetailPage({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="text-zinc-700 text-6xl font-bold">{exercise.name[0].toUpperCase()}</div>
+                <div className="text-zinc-700 text-6xl font-bold font-display">{exercise.name[0].toUpperCase()}</div>
               )}
             </div>
             {exercise.attribution && (
@@ -44,7 +45,7 @@ export default async function ExerciseDetailPage({
           </div>
 
           <div>
-            <h1 className="text-2xl font-bold text-white capitalize mb-4">{exercise.name}</h1>
+            <h1 className="text-3xl font-display font-bold text-white capitalize mb-6 leading-none">{exercise.name}</h1>
 
             <div className="space-y-3 mb-6">
               <Tag label="Category" value={exercise.category} />
@@ -53,10 +54,10 @@ export default async function ExerciseDetailPage({
               <Tag label="Equipment" value={exercise.equipment} />
               {secondaryMuscles.length > 0 && (
                 <div>
-                  <p className="text-xs text-zinc-500 mb-1">Secondary Muscles</p>
+                  <p className="text-xs text-zinc-500 mb-1.5 font-mono uppercase tracking-wider">Secondary Muscles</p>
                   <div className="flex flex-wrap gap-1.5">
                     {secondaryMuscles.map((m) => (
-                      <span key={m} className="px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 text-xs capitalize">
+                      <span key={m} className="tag">
                         {m}
                       </span>
                     ))}
@@ -66,11 +67,13 @@ export default async function ExerciseDetailPage({
             </div>
 
             <div>
-              <h2 className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Instructions</h2>
-              <ol className="space-y-2">
+              <h2 className="text-sm font-display font-bold text-zinc-400 mb-3 uppercase tracking-wider">Instructions</h2>
+              <ol className="space-y-3">
                 {instructions.map((step, i) => (
-                  <li key={i} className="flex gap-3 text-sm text-zinc-300">
-                    <span className="text-emerald-400 font-mono text-xs mt-0.5 shrink-0">{i + 1}.</span>
+                  <li key={i} className="flex gap-3 text-sm text-zinc-300 leading-relaxed">
+                    <span className="text-emerald-400 font-mono text-xs mt-0.5 shrink-0 w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                      {i + 1}
+                    </span>
                     <span>{step}</span>
                   </li>
                 ))}
@@ -87,8 +90,8 @@ function Tag({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-zinc-500 w-28 shrink-0">{label}</span>
-      <span className="px-2.5 py-1 rounded-md bg-zinc-800 text-zinc-200 text-sm capitalize">{value}</span>
+      <span className="text-xs text-zinc-500 w-28 shrink-0 font-mono uppercase tracking-wider">{label}</span>
+      <span className="tag">{value}</span>
     </div>
   );
 }

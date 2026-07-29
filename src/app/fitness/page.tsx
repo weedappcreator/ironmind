@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import FitnessShell from "./_shell";
-import { Dumbbell, Library, Route, TrendingUp, Apple, ArrowRight, Sparkles } from "lucide-react";
+import { Dumbbell, Library, Route, TrendingUp, Apple, ArrowRight, Sparkles, Activity } from "lucide-react";
 import { ScrollReveal } from "./_animations";
 import "./fitness.css";
 
@@ -27,43 +27,43 @@ export default async function FitnessPage() {
 
         <div className="p-6 lg:p-8 max-w-5xl relative">
           <ScrollReveal variant="fade-up" className="mb-10">
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-4">
               <Sparkles size={14} className="text-emerald-400" />
               <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/15 text-[10px] font-mono tracking-widest uppercase text-emerald-400/80">
                 Free Forever
               </span>
             </div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-white tracking-tight mb-2 leading-tight">
-              Welcome to <br className="sm:hidden" />
+            <h1 className="text-3xl lg:text-5xl font-display font-bold text-white tracking-tight mb-3 leading-none">
+              Welcome to&nbsp;
               <span className="gradient-text">IronMind</span>
             </h1>
-            <p className="text-zinc-500 text-sm max-w-md">Your entire fitness life. No subscriptions, no limits, no ads.</p>
+            <p className="text-zinc-500 text-sm max-w-lg leading-relaxed">Your entire fitness life. No subscriptions, no limits, no ads. Built for lifters, runners, and everyone in between.</p>
           </ScrollReveal>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-12">
             {[
-              { icon: Dumbbell, label: "Exercises", value: totalExercises, sub: "with GIF demos", delay: "delay-1" },
-              { icon: Library, label: "Categories", value: uniqueCategories.length, sub: "body parts", delay: "delay-2" },
-              { icon: Route, label: "Equipment", value: uniqueEquipment.length, sub: "types available", delay: "delay-3" },
-              { icon: Apple, label: "Price", value: "Free", sub: "no subscription", delay: "delay-4", accent: true },
+              { icon: Dumbbell, label: "Exercises", value: totalExercises, sub: "with GIF demos", delay: "delay-1", color: "text-emerald-400" },
+              { icon: Library, label: "Categories", value: uniqueCategories.length, sub: "body parts", delay: "delay-2", color: "text-blue-400" },
+              { icon: Route, label: "Equipment", value: uniqueEquipment.length, sub: "types available", delay: "delay-3", color: "text-amber-400" },
+              { icon: Activity, label: "Price", value: "Free", sub: "no subscription", delay: "delay-4", color: "text-emerald-400", accent: true },
             ].map((stat) => (
               <ScrollReveal key={stat.label} variant="scale-in" stagger={parseInt(stat.delay.replace("delay-", "")) * 50} className="h-full">
-                <div className={`glass-card rounded-xl p-4 h-full ${stat.delay}`}>
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 border border-emerald-500/10">
-                    <stat.icon size={16} className="text-emerald-400" />
+                <div className="stat-card h-full flex flex-col">
+                  <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 border border-emerald-500/10">
+                    <stat.icon size={17} className={stat.color} />
                   </div>
                   <p className="text-zinc-500 text-[10px] font-mono tracking-wider uppercase mb-0.5">{stat.label}</p>
-                  <p className={`text-2xl font-bold tabular-nums ${stat.accent ? "text-emerald-400" : "text-white"}`}>
+                  <p className={`text-2xl font-display font-bold tabular-nums ${stat.accent ? "gradient-text" : "text-white"}`}>
                     {stat.value}
                   </p>
-                  <p className="text-[10px] text-emerald-400/60 mt-1">{stat.sub}</p>
+                  <p className="text-[10px] text-zinc-600 mt-1">{stat.sub}</p>
                 </div>
               </ScrollReveal>
             ))}
           </div>
 
           <ScrollReveal variant="fade-up">
-            <h2 className="text-lg font-semibold text-white mb-4 tracking-tight">Quick Start</h2>
+            <h2 className="text-lg font-display font-bold text-white mb-4 tracking-tight">Quick Start</h2>
           </ScrollReveal>
 
           <div className="grid lg:grid-cols-2 gap-3">
@@ -80,9 +80,10 @@ export default async function FitnessPage() {
           </div>
 
           <ScrollReveal variant="fade-up" className="mt-12">
-            <div className="glass-panel rounded-xl p-5 text-center">
+            <div className="glass-panel rounded-xl p-6 text-center">
+              <Activity size={24} className="mx-auto text-emerald-400/60 mb-3" />
               <p className="text-xs text-zinc-500 font-mono tracking-wider uppercase mb-2">Built for lifters, runners, and everyone in between</p>
-              <p className="text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed">
+              <p className="text-sm text-zinc-500 max-w-lg mx-auto leading-relaxed">
                 IronMind is 100% free — no paywalls, no trial periods, no data selling.
                 Train hard, track everything, and never pay a dime.
               </p>
@@ -96,14 +97,14 @@ export default async function FitnessPage() {
 
 function QuickLinkCard({ title, href, desc, icon: Icon }: { title: string; href: string; desc: string; icon: any }) {
   return (
-    <a href={href} className="group glass-card rounded-xl p-5 block">
+    <a href={href} className="group stat-card block">
       <div className="flex items-start justify-between">
-        <div className="w-9 h-9 rounded-lg bg-emerald-500/8 flex items-center justify-center mb-3 border border-emerald-500/8 group-hover:border-emerald-500/20 transition-all duration-300">
-          <Icon size={17} className="text-emerald-400" />
+        <div className="w-10 h-10 rounded-lg bg-emerald-500/8 flex items-center justify-center mb-3 border border-emerald-500/8 group-hover:border-emerald-500/20 group-hover:bg-emerald-500/12 transition-all duration-300">
+          <Icon size={18} className="text-emerald-400" />
         </div>
         <ArrowRight size={16} className="text-zinc-600 group-hover:text-emerald-400 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
       </div>
-      <h3 className="font-semibold text-white group-hover:text-emerald-400 transition-colors duration-300 mb-1 text-sm">{title}</h3>
+      <h3 className="font-display font-bold text-white group-hover:text-emerald-400 transition-colors duration-300 mb-1">{title}</h3>
       <p className="text-zinc-500 text-xs leading-relaxed">{desc}</p>
     </a>
   );

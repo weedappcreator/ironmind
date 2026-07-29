@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Plus, Search, X, GripVertical, Trash2, Dumbbell, Play } from "lucide-react";
+import { Plus, Search, X, Trash2, Dumbbell, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { ScrollReveal } from "../_animations";
+import "../fitness.css";
 
 interface Exercise {
   id: string;
@@ -134,140 +136,132 @@ export default function RoutineBuilder() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="page-header">
         <div>
-          <h1 className="text-2xl font-bold text-white mb-1">Routines</h1>
+          <h1 className="text-2xl font-display font-bold text-white mb-1">Routines</h1>
           <p className="text-zinc-500 text-sm">{routines.length} routines</p>
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-all duration-200 btn-press"
         >
           <Plus size={16} /> New Routine
         </button>
       </div>
 
       {showCreate && (
-        <div className="mb-8 bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-white">Create Routine</h2>
-            <button onClick={() => setShowCreate(false)} className="text-zinc-500 hover:text-zinc-300">
-              <X size={18} />
-            </button>
-          </div>
-
-          <div className="space-y-4 mb-4">
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Routine name (e.g. Push Day, Upper Body)"
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50"
-            />
-            <input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Description (optional)"
-              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50"
-            />
-          </div>
-
-          <div className="space-y-2 mb-4">
-            {exercises.map((ex, i) => (
-              <div key={ex.exerciseId + i} className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-3">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    {ex.exercise.gifUrl && (
-                      <img src={`https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/${ex.exercise.gifUrl}`} alt="" className="w-8 h-8 rounded object-cover bg-zinc-700" />
-                    )}
-                    <div>
-                      <p className="text-sm text-white">{ex.exercise.name}</p>
-                      <p className="text-[10px] text-zinc-500 capitalize">{ex.exercise.target}</p>
-                    </div>
-                  </div>
-                  <button onClick={() => removeExercise(i)} className="p-1 text-zinc-600 hover:text-red-400">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <label className="text-[10px] text-zinc-500">Sets</label>
-                    <input type="number" value={ex.sets} onChange={(e) => updateExercise(i, "sets", parseInt(e.target.value) || 1)}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-white text-center focus:outline-none focus:border-emerald-500/50"
-                      min="1" max="20"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-[10px] text-zinc-500">Min Reps</label>
-                    <input type="number" value={ex.minReps} onChange={(e) => updateExercise(i, "minReps", e.target.value)}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-white text-center focus:outline-none focus:border-emerald-500/50"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-[10px] text-zinc-500">Max Reps</label>
-                    <input type="number" value={ex.maxReps} onChange={(e) => updateExercise(i, "maxReps", e.target.value)}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-white text-center focus:outline-none focus:border-emerald-500/50"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-[10px] text-zinc-500">Rest (s)</label>
-                    <input type="number" value={ex.restTime} onChange={(e) => updateExercise(i, "restTime", e.target.value)}
-                      className="w-full bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-white text-center focus:outline-none focus:border-emerald-500/50"
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {showSearch ? (
-            <div className="mb-4">
-              <input value={search} onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search exercises to add..."
-                className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50 mb-2"
-                autoFocus
-              />
-              <div className="max-h-48 overflow-y-auto space-y-1">
-                {searchResults.map((ex) => (
-                  <button key={ex.id} onClick={() => addToRoutine(ex)}
-                    className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-zinc-800 transition-colors text-left"
-                  >
-                    {ex.gifUrl && <img src={`https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/${ex.gifUrl}`} alt="" className="w-8 h-8 rounded object-cover bg-zinc-700" />}
-                    <div>
-                      <p className="text-sm text-white">{ex.name}</p>
-                      <p className="text-[10px] text-zinc-500 capitalize">{ex.target} · {ex.equipment}</p>
-                    </div>
-                  </button>
-                ))}
-                {search.length >= 2 && searchResults.length === 0 && <p className="text-zinc-600 text-xs text-center py-3">No exercises found</p>}
-              </div>
-              <button onClick={() => { setShowSearch(false); setSearch(""); }} className="text-xs text-zinc-500 hover:text-zinc-300 mt-2">Cancel</button>
+        <ScrollReveal variant="fade-up" className="mb-8">
+          <div className="glass-card rounded-xl p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-display font-bold text-white">Create Routine</h2>
+              <button onClick={() => setShowCreate(false)} className="btn-press p-1.5 text-zinc-500 hover:text-zinc-300 rounded-lg hover:bg-zinc-800/50">
+                <X size={18} />
+              </button>
             </div>
-          ) : (
-            <button onClick={() => setShowSearch(true)}
-              className="w-full py-2 border-2 border-dashed border-zinc-700 rounded-lg text-zinc-500 hover:text-emerald-400 hover:border-emerald-500/30 transition-colors text-sm flex items-center justify-center gap-2 mb-4"
-            >
-              <Plus size={14} /> Add Exercise
-            </button>
-          )}
 
-          <div className="flex gap-3 pt-3 border-t border-zinc-800">
-            <button onClick={saveRoutine} disabled={saving || !name.trim() || exercises.length === 0}
-              className="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-700 text-black disabled:text-zinc-500 font-medium rounded-lg text-sm transition-colors"
-            >
-              {saving ? "Saving..." : "Save Routine"}
-            </button>
-            <button onClick={() => setShowCreate(false)} className="px-4 py-2.5 text-zinc-400 hover:text-zinc-200 text-sm">Cancel</button>
+            <div className="space-y-3 mb-4">
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Routine name (e.g. Push Day, Upper Body)"
+                className="w-full input-premium"
+              />
+              <input
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Description (optional)"
+                className="w-full input-premium"
+              />
+            </div>
+
+            <div className="space-y-2 mb-4">
+              {exercises.map((ex, i) => (
+                <div key={ex.exerciseId + i} className="bg-zinc-800/30 border border-zinc-800/50 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      {ex.exercise.gifUrl && (
+                        <div className="w-8 h-8 rounded overflow-hidden bg-zinc-800 shrink-0">
+                          <img src={`https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/${ex.exercise.gifUrl}`} alt="" className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm text-white font-display font-semibold">{ex.exercise.name}</p>
+                        <p className="text-[10px] text-zinc-500 capitalize">{ex.exercise.target}</p>
+                      </div>
+                    </div>
+                    <button onClick={() => removeExercise(i)} className="btn-press p-1.5 text-zinc-600 hover:text-red-400 rounded-lg hover:bg-red-500/10">
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    {[{ key: "sets", label: "Sets" }, { key: "minReps", label: "Min Reps" }, { key: "maxReps", label: "Max Reps" }, { key: "restTime", label: "Rest (s)" }].map((f) => (
+                      <div key={f.key} className="flex-1">
+                        <label className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider">{f.label}</label>
+                        <input
+                          type={f.key === "sets" ? "number" : "number"}
+                          value={(ex as any)[f.key]}
+                          onChange={(e) => updateExercise(i, f.key, f.key === "sets" ? (parseInt(e.target.value) || 1) : e.target.value)}
+                          className="w-full input-premium-dark text-center text-xs mt-0.5"
+                          min={f.key === "sets" ? "1" : undefined}
+                          max={f.key === "sets" ? "20" : undefined}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {showSearch ? (
+              <div className="mb-4">
+                <input value={search} onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search exercises to add..."
+                  className="w-full input-premium-dark mb-2"
+                  autoFocus
+                />
+                <div className="max-h-48 overflow-y-auto space-y-1">
+                  {searchResults.map((ex) => (
+                    <button key={ex.id} onClick={() => addToRoutine(ex)}
+                      className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-zinc-800/50 transition-colors text-left"
+                    >
+                      {ex.gifUrl && <div className="w-8 h-8 rounded overflow-hidden bg-zinc-800 shrink-0"><img src={`https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/${ex.gifUrl}`} alt="" className="w-full h-full object-cover" /></div>}
+                      <div>
+                        <p className="text-sm text-white">{ex.name}</p>
+                        <p className="text-[10px] text-zinc-500 capitalize">{ex.target} · {ex.equipment}</p>
+                      </div>
+                    </button>
+                  ))}
+                  {search.length >= 2 && searchResults.length === 0 && <p className="text-zinc-600 text-xs text-center py-3">No exercises found</p>}
+                </div>
+                <button onClick={() => { setShowSearch(false); setSearch(""); }} className="text-xs text-zinc-500 hover:text-zinc-300 mt-2 transition-colors">Cancel</button>
+              </div>
+            ) : (
+              <button onClick={() => setShowSearch(true)}
+                className="w-full py-2 border-2 border-dashed border-zinc-700 rounded-lg text-zinc-500 hover:text-emerald-400 hover:border-emerald-500/30 transition-all duration-200 text-sm flex items-center justify-center gap-2 mb-4 btn-press"
+              >
+                <Plus size={14} /> Add Exercise
+              </button>
+            )}
+
+            <div className="flex gap-3 pt-3 border-t border-zinc-800/50">
+              <button onClick={saveRoutine} disabled={saving || !name.trim() || exercises.length === 0}
+                className="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:bg-zinc-700 text-black disabled:text-zinc-500 font-medium rounded-lg text-sm transition-all duration-200 btn-press"
+              >
+                {saving ? "Saving..." : "Save Routine"}
+              </button>
+              <button onClick={() => setShowCreate(false)} className="px-4 py-2.5 text-zinc-400 hover:text-zinc-200 text-sm transition-colors">Cancel</button>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       )}
 
       {!showCreate && routines.length === 0 ? (
-        <div className="text-center py-16 bg-zinc-900 border border-zinc-800 rounded-xl">
+        <div className="empty-state">
           <Dumbbell size={32} className="mx-auto text-zinc-700 mb-3" />
           <p className="text-zinc-500 mb-1">No routines yet</p>
           <p className="text-zinc-600 text-sm mb-4">Create your first custom workout plan</p>
           <button onClick={() => setShowCreate(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-all duration-200 btn-press"
           >
             <Plus size={16} /> Create Routine
           </button>
@@ -275,23 +269,23 @@ export default function RoutineBuilder() {
       ) : !showCreate && (
         <div className="space-y-3">
           {routines.map((r) => (
-            <div key={r.id} className="group bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-all">
+            <div key={r.id} className="group stat-card">
               <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">{r.name}</h3>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-display font-semibold text-white group-hover:text-emerald-400 transition-colors">{r.name}</h3>
                   {r.description && <p className="text-xs text-zinc-500 mt-0.5">{r.description}</p>}
                   <div className="flex items-center gap-3 mt-1.5 text-xs text-zinc-500">
                     <span>{r.exercises.length} exercises</span>
                     <span>{r.exercises.reduce((s: number, e: any) => s + e.sets, 0)} total sets</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0 ml-3">
                   <button onClick={() => startRoutine(r.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg text-xs hover:bg-emerald-500/20 transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg text-xs hover:bg-emerald-500/20 transition-all duration-200 btn-press"
                   >
                     <Play size={12} /> Start
                   </button>
-                  <button onClick={() => deleteRoutine(r.id)} className="p-1.5 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
+                  <button onClick={() => deleteRoutine(r.id)} className="btn-press p-1.5 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all duration-200">
                     <Trash2 size={14} />
                   </button>
                 </div>
@@ -299,12 +293,12 @@ export default function RoutineBuilder() {
               {r.exercises.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   {r.exercises.slice(0, 5).map((e: any) => (
-                    <span key={e.id} className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400">
+                    <span key={e.id} className="tag">
                       {e.exercise.name}
                     </span>
                   ))}
                   {r.exercises.length > 5 && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-500">
+                    <span className="tag">
                       +{r.exercises.length - 5} more
                     </span>
                   )}

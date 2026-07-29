@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Clock, Dumbbell, ArrowRight, Trash2, Activity } from "lucide-react";
 import Link from "next/link";
+import { ScrollReveal } from "../_animations";
 
 interface WorkoutSummary {
   id: string;
@@ -48,14 +49,14 @@ export default function WorkoutList() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="page-header">
         <div>
-          <h1 className="text-2xl font-bold text-white mb-1">Workouts</h1>
+          <h1 className="text-2xl font-display font-bold text-white mb-1">Workouts</h1>
           <p className="text-zinc-500 text-sm">{workouts.length} total workouts</p>
         </div>
         <button
           onClick={() => setShowStart(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-all duration-200 btn-press"
         >
           <Plus size={16} />
           Start Workout
@@ -63,62 +64,66 @@ export default function WorkoutList() {
       </div>
 
       {showStart && (
-        <div className="mb-6 p-4 bg-zinc-900 border border-zinc-800 rounded-xl flex gap-3">
-          <input
-            value={workoutName}
-            onChange={(e) => setWorkoutName(e.target.value)}
-            placeholder="Workout name (optional)"
-            className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/50"
-            autoFocus
-            onKeyDown={(e) => e.key === "Enter" && startWorkout()}
-          />
-          <button onClick={startWorkout} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-black rounded-lg text-sm font-medium transition-colors">
-            Go
-          </button>
-          <button onClick={() => setShowStart(false)} className="px-3 py-2 text-zinc-400 hover:text-zinc-200 text-sm">
-            Cancel
-          </button>
-        </div>
+        <ScrollReveal variant="fade-up" className="mb-6">
+          <div className="glass-panel rounded-xl p-4 flex gap-3">
+            <input
+              value={workoutName}
+              onChange={(e) => setWorkoutName(e.target.value)}
+              placeholder="Workout name (optional)"
+              className="flex-1 input-premium-dark"
+              autoFocus
+              onKeyDown={(e) => e.key === "Enter" && startWorkout()}
+            />
+            <button onClick={startWorkout} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-black rounded-lg text-sm font-medium transition-all duration-200 btn-press">
+              Go
+            </button>
+            <button onClick={() => setShowStart(false)} className="px-3 py-2 text-zinc-400 hover:text-zinc-200 text-sm transition-colors">
+              Cancel
+            </button>
+          </div>
+        </ScrollReveal>
       )}
 
       {loading ? (
         <div className="text-center py-16 text-zinc-500">Loading workouts...</div>
       ) : workouts.length === 0 ? (
-        <div className="text-center py-16 bg-zinc-900 border border-zinc-800 rounded-xl">
+        <div className="empty-state">
           <Activity size={32} className="mx-auto text-zinc-700 mb-3" />
           <p className="text-zinc-500 mb-1">No workouts yet</p>
           <p className="text-zinc-600 text-sm mb-4">Start your first workout to begin tracking</p>
-          <button onClick={() => setShowStart(true)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-colors">
+          <button onClick={() => setShowStart(true)} className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-black font-medium rounded-lg text-sm transition-all duration-200 btn-press">
             <Plus size={16} /> Start Workout
           </button>
         </div>
       ) : (
         <div className="space-y-2">
           {workouts.map((w) => (
-            <div key={w.id} className="group bg-zinc-900 border border-zinc-800 rounded-xl p-4 hover:border-zinc-700 transition-all">
-              <div className="flex items-center justify-between">
-                <Link href={`/fitness/workouts/${w.id}`} className="flex-1">
-                  <h3 className="font-semibold text-white group-hover:text-emerald-400 transition-colors">
-                    {w.name || "Workout"}
-                  </h3>
-                  <div className="flex items-center gap-4 mt-1 text-xs text-zinc-500">
-                    <span>{new Date(w.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</span>
-                    {w.duration && <span className="flex items-center gap-1"><Clock size={12} /> {Math.floor(w.duration / 60)}m</span>}
-                    <span>{w.exerciseCount} exercises</span>
-                    <span>{w.totalSets} sets</span>
-                    {w.totalVolume > 0 && <span>{w.totalVolume.toLocaleString()} kg total</span>}
-                  </div>
-                </Link>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => deleteWorkout(w.id)} className="p-2 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all">
-                    <Trash2 size={14} />
-                  </button>
-                  <Link href={`/fitness/workouts/${w.id}`} className="p-2 text-zinc-500 hover:text-zinc-200">
-                    <ArrowRight size={16} />
+            <ScrollReveal key={w.id} variant="fade-up">
+              <div className="group stat-card">
+                <div className="flex items-center justify-between">
+                  <Link href={`/fitness/workouts/${w.id}`} className="flex-1 min-w-0">
+                    <h3 className="font-display font-semibold text-white group-hover:text-emerald-400 transition-colors">
+                      {w.name || "Workout"}
+                    </h3>
+                    <div className="flex items-center gap-4 mt-1.5 text-xs text-zinc-500 flex-wrap">
+                      <span>{new Date(w.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</span>
+                      {w.duration && <span className="flex items-center gap-1"><Clock size={12} /> {Math.floor(w.duration / 60)}m</span>}
+                      <span>{w.exerciseCount} exercises</span>
+                      <span>{w.totalSets} sets</span>
+                      {w.totalVolume > 0 && <span className="text-emerald-400/80">{w.totalVolume.toLocaleString()} kg</span>}
+                    </div>
                   </Link>
+                  <div className="flex items-center gap-2 shrink-0 ml-3">
+                    <button onClick={() => deleteWorkout(w.id)} className="p-2 text-zinc-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                      <Trash2 size={14} />
+                    </button>
+                    <Link href={`/fitness/workouts/${w.id}`} className="p-2 text-zinc-500 hover:text-zinc-200 transition-colors">
+                      <ArrowRight size={16} />
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       )}

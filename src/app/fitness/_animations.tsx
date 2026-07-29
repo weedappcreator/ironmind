@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type AnimationVariant =
   | "fade-up"
@@ -8,7 +8,8 @@ type AnimationVariant =
   | "scale-in"
   | "slide-right"
   | "slide-left"
-  | "zoom-in";
+  | "zoom-in"
+  | "slide-up";
 
 interface UseRevealOptions {
   threshold?: number;
@@ -18,8 +19,8 @@ interface UseRevealOptions {
 }
 
 export function useReveal<T extends HTMLElement = HTMLDivElement>({
-  threshold = 0.1,
-  rootMargin = "0px 0px -40px 0px",
+  threshold = 0.05,
+  rootMargin = "0px 0px -20px 0px",
   variant = "fade-up",
   stagger = 0,
 }: UseRevealOptions = {}) {
@@ -62,6 +63,7 @@ const variantMap: Record<AnimationVariant, string> = {
   "slide-right": "animate-slide-right",
   "slide-left": "animate-slide-left",
   "zoom-in": "animate-zoom-in",
+  "slide-up": "animate-slide-up",
 };
 
 export function ScrollReveal({
@@ -88,7 +90,7 @@ export function ScrollReveal({
     stagger,
   });
 
-  const hiddenClass = variant === "fade-in" ? "opacity-0" : "opacity-0 translate-y-4";
+  const hiddenClass = "opacity-0";
   const visibleClass = variantMap[variant];
 
   return (
