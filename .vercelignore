@@ -7,10 +7,11 @@ src/app/api/subdomains
 src/app/api/tasks
 src/app/api/meta
 src/app/api/slack
+src/app/api/export-video
 src/app/taconazo
 src/app/weed-kerwing
 src/app/subdomains
-src/app/[projectId]
+src/app/\[projectId\]
 src/app/main-content.tsx
 src/lib/provider.ts
 src/lib/contexts
